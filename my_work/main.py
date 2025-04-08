@@ -1,5 +1,7 @@
 import csv
 
+is_signedin = False
+
 def start_program():
     global is_signedin
     if is_signedin == True:
@@ -8,21 +10,20 @@ def start_program():
         notsignedin()
 
 def signedin():
-        print("Choose: \nLogin \nRegister \nQuit")
-    whichone = input("  ")
+    print("Choose: \n    Change Password\n    Logout\n")
+    whichopt = input("  ")
     match whichone:
-        case "Login" | "login":
-            login()
-        case "Register"|"register":
-            register()
-        case "Quit"|"quit":
-            print("You have quit the program.")
+        case "Change password"|"Change Password"|"change password":
+            change_password()
+        case "Logout"|"logout"|"Log out"|"log out"|"Log Out":
+            print("You have logged out.")
+            is_signedin = False
 
 def notsignedin():
-    print("Choose: \nLogin \nRegister \nQuit")
-    whichone = input("  ")
+    print("Choose: \n    Login \n    Register \n    Quit")
+    whichone = input("")
     match whichone:
-        case "Login" | "login":
+        case "Login"|"login"|"Log in"|"log in"|"Log In":
             login()
         case "Register"|"register":
             register()
@@ -39,10 +40,17 @@ def register():
 def create_account_username():
     global username
     username = input("Register Username: ")
+    doesusernamealreadyexist()
+
+#Check if the registered username already exists
+def doesusernamealreadyexist():
     with open ("source.csv", "a") as file:
-        file.write(f"{username}, ")
-    
-    create_account_password()
+        if username == row[0]:
+            print("Username is already taken, please enter another.")
+        else:
+            file.write(f"{username}, ")
+        create_account_password()
+
 
     #Create account - Password
 def create_account_password():
@@ -53,32 +61,31 @@ def create_account_password():
 
     #Salt & Hash password
 
-
-
-    #Is UN the same as another?
-#def username_issameassomeoneelse():
-    
-
+#how??
 
 #LOGIN
-    #Does UN Exist?
+
 def login():
+    global existingusername
+    existingusername = input("Enter Username: ")
     loginusernamechecker()
 
+
+    #Does Username Exist?
 def loginusernamechecker():
     usernamecheck = []
 
     with open ("source.csv") as file:
         reader = csv.reader(file)
         for row in reader:
-            usernamecheck.append({"username": row[0]})
-    if usernamecheck != row[0]:
+            usernamecheck.append({"username": row[0], "password": row[1]})
+    if existingusername != row[0]:
         print("Username does not exist, try again.")
     else: 
-        print("Username accepted.")
-        loginpasswordchecker()
+        print(f"Username accepted, welcome, {existingusername}")
+        
 
-    #Is PW Correct?
+    #Is Password Correct?
 def loginpasswordchecker():
     passwordcheck = []
 
@@ -91,18 +98,10 @@ def loginpasswordchecker():
         print("Password accepted, logged in.")
         is_signedin = True
 
-    #Update menu
-
-
-#QUIT
-
-    #End program
-
-
-
 #CHANGE PASSWORD
-    #Edit plain_text.txt to have the new password
-
+    #Edit source.csv to have the new password
+def change_password():
+    print("not working yet.")
 
 #LOGOUT
     #End program
