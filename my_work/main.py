@@ -46,25 +46,36 @@ def create_account_username():
     doesusernamealreadyexist()
 
 #Check if the registered username already exists
+# IF the username already exists:
+    # tell the user and kick them back to the menu
+# ELSE:
+    # Jump to password creation
 def doesusernamealreadyexist():
     with open ("plain_text.txt", "a") as file:
         if username == row[0]:
             print("Username is already taken, please enter another.")
+            notsignedin()
         else:
             file.write(f"{username},")
         create_account_password()
 
 
     #Create account - Password
+
+    # ask user for a password
+    # Write the password to plain_text.txt
+    # tell the user they created a password
+    # return to the menu
 def create_account_password():
     password = input("Create Password: ")
     with open ("plain_text.txt", "a") as file:
         file.write(f"{password}\n")
-    login()
+    print("Password created.")
+    notsignedin()
 
     #Salt & Hash password
 
-#how??
+
 
 #LOGIN
 def login():
@@ -80,8 +91,15 @@ def loginusernamechecker():
     with open ("plain_text.txt") as file:
         reader = csv.reader(file)
         for row in reader:
-            usernamecheck.append({"username": row[0], "password": row[1]})
-    if existingusername != row[0]:
+            usernamecheck.append({"username": row[0]})
+# IF existingusername does not match one in plain_text.txt:
+    # PRINT username doesnt exist
+    # Return to the main menu
+# ELSE:
+    # PRINT username accepted
+    # RUN passwordchecker
+
+    if existingusername == row[0]:
         print("Username does not exist, try again.")
         notsignedin()
     else: 
@@ -93,29 +111,40 @@ def loginpasswordchecker():
     checkpassword = input("Enter Password: ")
     passwordcheck = []
 
+# Check plaintext.txt for the entered password
+# IF entered password doesnt exist:
+    # PRINT password not accepted
+    # return to the main menu
+# ELSE:
+    # Welcome the user
+    # SET is_signedin variable to TRUE
+    # Return to the main menu's signed in version
+
     with open ("plain_text.txt") as file:
+        reader = csv.reader(file)
         for row in reader:
             passwordcheck.append({"password": row[1]})
     if passwordcheck != row[1]:
         print("Incorrect password, try again.")
         notsignedin()
     else:
-        print(f"Password accepted, welcome, {existingusername}")
+        print(f"Password accepted. Welcome, {existingusername}.")
         is_signedin = True
         signedin()
 
 #CHANGE PASSWORD
-    #Edit source.csv to have the new password
+    # Get the new password from the user
+    # Edit plaintext.txt to have the new password
+    # Return to the signed in menu
+    
 def change_password():
     newpassword = input("Enter new password: ")
     with open("plain_text.txt", "a") as file:
         writer = csv.DictWriter(file, fieldnames=["username", "password"])
-        writer.writerow({"username": username, "password": newpassword})
+        writer.writerow({"username": previoususername, "password": newpassword})
     print("Password updated.")
-    is_signedin()
+    signedin()
 
-#LOGOUT
-    #End program
 
-#RUN
+#Runs the program
 start_program()
