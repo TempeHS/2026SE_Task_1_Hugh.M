@@ -13,7 +13,7 @@ def start_program():
 #the main menu if the user is signed in
 def signedin():
     print("Choose: \n    Change Password\n    Logout\n")
-    whichoption = input("  ")
+    whichoption = input("|")
     match whichoption:
         case "Change password"|"Change Password"|"change password":
             change_password()
@@ -24,7 +24,7 @@ def signedin():
 #The main menu if the user is not signed in
 def notsignedin():
     print("Choose: \n    Login \n    Register \n    Quit")
-    whichone = input("")
+    whichone = input("|")
     match whichone:
         case "Login"|"login"|"Log in"|"log in"|"Log In":
             login()
@@ -45,11 +45,13 @@ def create_account_username():
     username = input("Register Username: ")
     doesusernamealreadyexist()
 
+#doesusernamealreadyexist()
 #Check if the registered username already exists
 # IF the username already exists:
     # tell the user and kick them back to the menu
 # ELSE:
     # Jump to password creation
+
 def doesusernamealreadyexist():
     with open ("plain_text.txt", "a") as file:
         if username == row[0]:
@@ -61,7 +63,7 @@ def doesusernamealreadyexist():
 
 
     #Create account - Password
-
+#create_account_password()
     # ask user for a password
     # Write the password to plain_text.txt
     # tell the user they created a password
@@ -85,13 +87,8 @@ def login():
 
 
     #Does Username Exist?
-def loginusernamechecker():
-    usernamecheck = []
 
-    with open ("plain_text.txt") as file:
-        reader = csv.reader(file)
-        for row in reader:
-            usernamecheck.append({"username": row[0]})
+#loginusernamechecker()
 # IF existingusername does not match one in plain_text.txt:
     # PRINT username doesnt exist
     # Return to the main menu
@@ -99,7 +96,14 @@ def loginusernamechecker():
     # PRINT username accepted
     # RUN passwordchecker
 
-    if existingusername == row[0]:
+def loginusernamechecker():
+    usernamecheck = []
+
+    with open ("plain_text.txt") as file:
+        reader = csv.reader(file)
+        for row in reader:
+            usernamecheck.append({"username": row[0]})
+    if existingusername != row[0]:
         print("Username does not exist, try again.")
         notsignedin()
     else: 
@@ -107,10 +111,7 @@ def loginusernamechecker():
         loginpasswordchecker()
 
     #Is Password Correct?
-def loginpasswordchecker():
-    checkpassword = input("Enter Password: ")
-    passwordcheck = []
-
+#loginpasswordchecker()
 # Check plaintext.txt for the entered password
 # IF entered password doesnt exist:
     # PRINT password not accepted
@@ -119,6 +120,9 @@ def loginpasswordchecker():
     # Welcome the user
     # SET is_signedin variable to TRUE
     # Return to the main menu's signed in version
+def loginpasswordchecker():
+    checkpassword = input("Enter Password: ")
+    passwordcheck = []
 
     with open ("plain_text.txt") as file:
         reader = csv.reader(file)
@@ -133,6 +137,7 @@ def loginpasswordchecker():
         signedin()
 
 #CHANGE PASSWORD
+#change_password()
     # Get the new password from the user
     # Edit plaintext.txt to have the new password
     # Return to the signed in menu
@@ -146,5 +151,5 @@ def change_password():
     signedin()
 
 
-#Runs the program
+#Run the program
 start_program()
